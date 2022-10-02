@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ocr/Screen/recognization_page.dart';
 import 'package:flutter_ocr/Utilis/image_picker_class.dart';
 import 'package:flutter_ocr/Widgets/modal_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import './Utilis/image_cropper_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -73,14 +76,30 @@ class _MyHomePageState extends State<MyHomePage> {
             log("Camera");
             pickImage(source: ImageSource.camera).then((value) {
                if(value != '') {
-
+                imageCropperView(value, context).then((value) {
+                   if(value == '') {
+                  Navigator.push(context, CupertinoPageRoute(
+                    builder: (_) => RecognizedPage(
+                    path: value,
+                  )));
+                   }
+                });
                }
             });
           },
           onGallery: () {
             log("Gallery");
             pickImage(source: ImageSource.gallery).then((value){
-
+               if(value != ''){
+                imageCropperView(value, context).then((value) {
+                     Navigator.push(context, CupertinoPageRoute(
+                    builder: (_) => RecognizedPage(
+                    path: value,
+                  ))
+                  );
+                   
+                });
+               }
             });
           },
           );
